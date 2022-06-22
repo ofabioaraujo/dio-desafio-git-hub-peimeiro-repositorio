@@ -1,0 +1,144 @@
+*Comandos básicos para um bom desempenho no terminal* -  Falta escrever aqui os comandos dos terminais Unix
+A maioria dos SO possuem inteface gráfica de interação (GUI - graphic user interface).
+
+No Git se utiliza o Comand Line Interface (CLI), ou seja o comando para acesso, criação de pastas, arquivos e etc são feitos através de linhas de comando.
+
+Existem softwares que integram ao Git o GUI, porém, neste módulo será utilizado o CLI.
+
+Para abrir o terminal (prompt de comando) é só escrever na barra de busca do Windows: cmd
+
+Comando dir (windows)/ls (unix): comando utilizado para listar, ou seja, se escrevermos dir/ls e dermos enter no terminal ele retorna uma lista de diretórios contidos na pasta
+em que estamos cituados.
+
+Comando cd: o change directory (cd) permite que naveguemos entre as pastas. No terminal escreva: cd \
+Ao dar esse comando, somos levados para a base do diretório C
+Exemplo: se eu quiser acessar a pasta Windows, é só dar o comando: cd windows
+Se usarmos o comando dir na pasta windows, ele listará todos os diretórios dentro da pasta windows, ou seja, as pastas que estão dentro do windows
+Para voltar um nível no caminho, ou seja, voltar para a pasta anterior, o comando é: cd ..
+
+Comando para limpar a tela: cls (windows)/ctrl+l (unix)
+
+Atalho TAB (no teclado): o TAB tem a função de auto completar, ou seja, se escrevermos no terminal cd w e apertarmos a tecla TAB, ele completará a palavra
+retornando cd windows. Caso ele não retorne a pasta desejada, é só apertar TAB novamente que ele irá mundando entre as pastas que começam com a letra w até
+chegar na pasta desejada
+
+Comando para criar uma pasta: mkdir (make directory), serve tanto para o windows como para o unix. No terminal, escreva mkdir seguido pelo nome da pasta (ex: mkdir workspace)
+e então der enter para criá-la
+OBS: no unix é preciso pedir permissão primeiro antes de dar o comando mkdir, a permissão é solicitada através do comando sudo su
+
+Criando arquivos dentro da pasta Workspace: escrever no terminal o comando echo que printa de volta no termial o texto que você escreverá, ou seja, você primeiro
+dar o comando echo, em seguida escreve um título para o arquivo e depois coloca o símbolo >, após o símbolo você repete o título do arquivo seguido pelo formato
+Ex: echo hello > hello.txt
+Quando dar enter nesse comando, o terminal irá verificar se existe no diretório um arquivo com esse nome e se não houver, ele irá criá-lo
+
+Comando para deletar arquivos: del
+Ex: listar o diretório, escrever del seguido do nome da pasta que deseja excluir: del workspace
+Será deletado todos os arquivos dentro da pasta workspace, mas a pasta não será deletada
+
+Comando para remover pastas, deletá-las: rmdir (remove directory). É só escrever rmdir seguido do nome da pasta e com /S /Q no final
+Ex: rmdir workspace /S /Q
+
+*Tópicos fundamentais para entender o funcionamento do Git*
+SHA1: Secure Hash Algorithm é um algorítmo de encriptação, o qual encripta nossos arquivos. Ele gera uma chave de 40 caracteres para cada arquivo, que é uma
+maneira eficiente e segura de identificar o arquivo
+Se você faz alteração no arquivo, a chave muda. Se você altera o arquivo novamente mas deixando-o exatamente como era antes, a chave voltar a ser a mesma.
+Ex: Você gera uma chave no Git para um arquivo de texto, se nesse arquivo for acrescentada uma vírgula a chave muda, mas se essa vírgula for retirada e o texto
+voltar a ser como era inicialmente, a chave volta a ser igual a primeira gerada
+
+*Objetos Fundamentais*
+Blobs, Trees, Commits
+Objeto Blob: os arquivos ficam guardados dentro do objeto Blob, o qual possui metadados.
+Estrutura: tipo do objeto (que é Blob), o tamanho do arquivo, \0 e o conteúdo
+
+Objeto Tree: amazenam Blobs, contém também meta dados. É responsável por montar toda a estrutura de onde estão os arquivos. Podem apontar tanto para blobs como
+para outras trees. É um objeto recursivo
+Estrutura: tipo de objeto (tree), tamanho, \0,...
+
+Objeto Commit: é o objeto que junta tudo, objeto que da sentindo para a alteração que está sendo feita. O Commit aponta para uma tree, para um parente (último
+commit realizado antes dele), aponta para um autor e para uma mensagem também. Uma mensagem pode ser escrita no commit para explicar a alteração dos blobs e trees
+
+Quando se altera um arquivo em uma blob, o seu sha será alterado, consequentemente o da tree e da commit também, e através do histórico da commit é possível
+identificar as alterações feitas
+
+O Git é um sistema distribuído seguro
+
+*Chaves SSH e Tokens*
+Chave SSH é uma forma de estabelecer uma conexão segura e encriptada entre duas máquinas. A conexão é estabelecida com duas chaves. Sempre haverá uma chave
+pública e uma chave privada. Pegamos a chave pública e a inserimos no GitHub, assim ele irá reconhecer nossa máquina
+
+Criando a chave SSH no Git Bash: ssh-keygen -t ed25519 (tipo de criptografia da chave) -C fabio010296@gmail.com enter
+Após será pedido para criar uma senha e repetí-la, ao dar enter o terminal dará a confirmação de que a chave foi criada e onde está armazenada
+Feito isso, acessamos o diretório onde estão as chaves pública e privada geradas anteriormente: cd /C/users/fabio/.ssh/
+Feito isso, damos o comando ls para listar os arquivos dentro da pasta .ssh, onde haverá dois arquivos, a chave pública e a privada
+Para vizualizar o conteúdo dessas chaves é preciso dar o comando cat seguido do nome do arquivo (ex: cat id_25519.pub), assim acessaremos a chave pública
+que está armazenada neste arquivo e esta deve ser inserida no GitHub
+Após esse procedimento, no CLI (Git Bash) deve se inicializar o ssh agent que ficará encarregado de lidar com as chaves: eval $(ssh-agent -s) enter
+O teminal retorna o seguinte: Agent pid 1695 (esse número varia) é o número do processo que está iniciando
+Em seguida, com o agente gerado, vamos entregar-lhe a chave pelo camiho: ssh-add id_ed25519 (vamos passar a chave privada para o agente) enter, inserir senha e
+o terminal retorna confirmando a entrega da chave
+
+*Iniciando o Git e criando um commit*
+- Iniciar o GIT: git init
+- Iniciar o versionamento: git add 
+- Criar um commit: git commit
+
+Criando um repositório: criando a pasta livro-receitas dentro da pasta workspace
+comando mkdir livro-receitas depois enter, pronto, pasta criada
+Iniciando o git dentro da pasta livro-receitas: git init
+Após esse comando, o terminal retorna o seguinte: Reinitialized existing Git repository in C:/workspace/livro-receitas/.git/, ou seja, dizendo que a pasta está
+vazia, porém há uma pasta oculta dentro dela que é a /.git/, essa pasta é onde toda a codificação feita no Git fica armazenada
+Para enxergar essa pasta é só utiliza a seguinte flag em ls: ls -a (a flag -a é a que mostra arquivos ocultos)
+Primeiro arquino na pasta livro-receitas: antes de criá-lo, é preciso fazer uma configuração de informar o e-mail e o nome do autor, pois para criar a commit
+é preciso que ela esteja atrelada a um criador. A configuração é a seguinte: git config --global user.email "fabio010296@gmail.com" (comando para informar o
+ e-mail). git config --global user.name "Fábio" (comando para informar o nome)
+Agora, criando o arquivo dentro da pasta: o arquivo será criado no formato markdown, pois é o formato mais simples de se escrever um arquivo HTML. Após o arquivo
+ter sido criado (que é uma receita) no typora ou no VSC, os seguintes comando precisam ser dados para que uma commit dele seja criada
+Criando a commit: git add * enter git commit -m "commit inicial" 
+
+*Ciclo de vida dos arquivos* - revendo o que foi feito na aula anterior e prestando atenção as teminologias
+Quando usamos o git init, além de criar a pasta oculta .git, ele inicializa um repositório
+
+Tracked ou untracked: os aquivos trackeds são aqueles que podem ser rastreados de fato pelo git e podem se subdivir em três: unmodified (arquivo não modificado),
+modified (arquivo modificado) e staged (onde ficam os arquivos que estão se preparando para fazerem parte de um outro tipo de agrupamento)
+Quando usamos na aula passada o git add, fizemos o seguinte processo: tínhamos um arquivo untrecked (arquivo que acabou de ser criado) que era o strogonoff.md
+e ao utilizamos o comando git add, ele moveu o arquivo direto para staged
+Unmodifeid: é um arquivo presente no repositório do git que ainda não foi alterado. Quanto isso ocorre, ele muda automaticamente de unmodified para modified.
+Um arquivo modified que recebe o comando git add é movido para stage. Um arquivo unmodified que é removido, ele volta para untracked.
+Quando um arquivo é movido para staged, ele está se preparando para fazer parte de um commit. Quando o arquivo vira um commit, ele retorna para ser unmodified
+
+Ambientes: servidor e ambiente de desenvolvimento.
+Servidor: repositório remoto (ex: GitHub)
+Ambiente de desenvolvimento: repositório de trabalho, staging area, repositório local (quando você faz um commit, ele integra esse repositório) 
+
+git status: comando que nos ajuda identificando qual o status de um arquivo, se ele é stage, unmodified e etc.
+
+Comando para mover um arquivo para outra pasta: mv nome do arquivo ./nome da pasta/
+Ex: mv strogonoff.md ./receitas/
+
+*Trabalhando com o GitHub*
+É interessante que o nome de usurário e o e-mail cadastrado no GitHub seja igual ao que está registrado no Git
+Para verificar qual o usuário e e-mail cadastrado no Git, é preciso usar o comando: git config --list, com esse comando ele trará todas as informações
+inseridas no Git
+Caso você tenha criado uma conta no GitHub e no Git com informações diferentes, para mudar uma informação se utiliza o comando: 
+git config --global --unset user.email/name
+
+No GitHub, ao criar um novo repositório, ele da as instruções de como enviar criar ou enviar um arquivo para esse repositório do seu terminal local.
+Para enviar o repositório você copia a URL do repositório e o insere no terminal local com o comando:
+git remote add origin https://github.com/ofabioaraujo/livro-receitas.git
+Após isso, é só aplicar o comando: git remote -v que ele vai listar os repositórios remotos cadastrados
+
+Comando para enviar o código do repositório local (git) para o repositório remoto (GitHub): git push origin master
+
+*Como os conflitos acontecem no GitHub e como resolvê-los*
+Um conflito ocorre quando você e um terceiro clonam um mesmo código contido no GitHub para suas respectivas máquinas estes fazem uma alteração na mesma linha
+de código. Quando ambos tentam enviar o código para o GitHub é que acontece o conflito, esse se chama conflito de merge
+
+Abri o arquivo strogonoff.md no typora e adicionei mais uma receita. Em seguida apliquei um git add * e depois um git commit -m. Feito isso, tentei enviar essa
+commit para o GitHub através do comando git push origin master, mas o terminal me retornou um erro
+Para resolver isso, é necessário integrar o arquivo que estava no terminal remoto com o que foi alterando na minha máquina. Para isso, é preciso usar o comando:
+git pull origin master depois abrir o arquivo, corrigí-lo e então dar um git add * e depois um git commit -m "string"
+
+Como baixar um repositório do GitHub para o repositório local: 
+encontrar o repositório desejado, clicar em code/código e copiar a URL que aparecer. No terminal local, dar o comando git clone URL copiada
+
+Markdown Guide: https://www.markdownguide.org/basic-syntax/
